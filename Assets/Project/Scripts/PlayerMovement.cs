@@ -42,6 +42,19 @@ public class PlayerMovement : MonoBehaviour
         float speed = moveDirection.magnitude * moveSpeed;
         if (animator != null)
             animator.SetFloat("Speed", speed);
+
+        //シフトキーでダッシュ
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            moveDirection *= 2; // ダッシュ時に速度を2倍に
+            if (animator != null)
+                animator.SetBool("IsRunning", true);
+        }
+        else
+        {
+            if (animator != null)
+                animator.SetBool("IsRunning", false);
+        }
     }
 
     void FixedUpdate()
