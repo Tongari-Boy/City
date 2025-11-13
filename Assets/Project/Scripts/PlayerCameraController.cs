@@ -1,51 +1,53 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public class PlayerCameraController : MonoBehaviour
 {
-    [Header("ƒ^[ƒQƒbƒgİ’è")]
-    public Transform target; // ’Ç]‘ÎÛiƒvƒŒƒCƒ„[j
-    public Vector3 offset = new Vector3(0, 2f, -4f); // ƒvƒŒƒCƒ„[‚©‚ç‚Ì‹——£
+    [Header("ã‚¿ãƒ¼ã‚²ãƒƒãƒˆ")]
+    public Transform target;  // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼
 
-    [Header("‰ñ“]İ’è")]
-    public float mouseSensitivity = 2f;
-    public float minPitch = -30f;
-    public float maxPitch = 60f;
+    [Header("ã‚«ãƒ¡ãƒ©è¨­å®š")]
+    public float distance = 5f;          // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¨ã®è·é›¢
+    public float height = 2f;            // ã‚«ãƒ¡ãƒ©ã®é«˜ã•
+    public float followSmoothTime = 0.1f; // è¿½å¾“ã‚¹ãƒ ãƒ¼ã‚ºæ™‚é–“
+    public float rotationSpeed = 3f;     // å›è»¢é€Ÿåº¦
 
-    private float yaw = 0f;   // …•½•ûŒü‚Ì‰ñ“]
-    private float pitch = 0f; // ‚’¼•ûŒü‚Ì‰ñ“]
+    private Vector3 currentVelocity;
+    private float yaw;
+    private float pitch;
 
     void Start()
     {
+        if (target == null)
+        {
+            Debug.LogError("PlayerCameraController: ã‚¿ãƒ¼ã‚²ãƒƒãƒˆãŒè¨­å®šã•ã‚Œã¦ã„ã¾ã›ã‚“ï¼");
+            enabled = false;
+            return;
+        }
+
         Vector3 angles = transform.eulerAngles;
         yaw = angles.y;
         pitch = angles.x;
 
-        //ƒ}ƒEƒXƒJ[ƒ\ƒ‹‚ÌŒÅ’è‚Æ”ñ•\¦
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
 
     void LateUpdate()
     {
-        if(!target) return;
-
-        //“ü—Íæ“¾
+        //ã‚«ãƒ¡ãƒ©å›è»¢å‡¦ç†ï¼ˆãƒã‚¦ã‚¹æ“ä½œï¼‰
         float mouseX = Input.GetAxis("Mouse X");
         float mouseY = Input.GetAxis("Mouse Y");
 
-        Debug.Log($"Mouse Input: X={mouseX}, Y={mouseY}");
+        yaw += mouseX * rotationSpeed;
+        pitch -= mouseY * rotationSpeed;
+        pitch = Mathf.Clamp(pitch, -30f, 60f);
 
-        //‰ñ“]XV
-        yaw += mouseX * mouseSensitivity;
-        pitch -= mouseY * mouseSensitivity;
-        pitch = Mathf.Clamp(pitch, minPitch, maxPitch);
-
-        //ƒJƒƒ‰‚Ì‰ñ“]
         Quaternion rotation = Quaternion.Euler(pitch, yaw, 0);
 
-        //ˆÊ’u‚ğƒ^[ƒQƒbƒg‚ÌŒã•û‚Éİ’è
-        Vector3 desiredPosition = target.position + rotation * offset;
-        transform.position = desiredPosition;
-        transform.LookAt(target);
+        //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’è¿½å¾“ã™ã‚‹ä½ç½®ï¼ˆã‚¹ãƒ ãƒ¼ã‚ºè£œé–“ï¼‰
+        Vector3 targetPosition = target.position + Vector3.up * height - rotation * Vector3.forward * distance;
+        transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref currentVelocity, followSmoothTime);
+
+        transform.rotation = rotation;
     }
 }

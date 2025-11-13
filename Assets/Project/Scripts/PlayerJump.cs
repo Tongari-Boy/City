@@ -43,7 +43,7 @@ public class PlayerJump : MonoBehaviour
     void CheckGrounded()
     {
         // プレイヤーの足元から下方向にRayを飛ばして接地判定
-        isGrounded = Physics.Raycast(transform.position, Vector3.down, groundCheckDistance + 0.1f, groundLayer);
+        isGrounded = Physics.Raycast(transform.position, Vector3.down, groundCheckDistance + 0.2f, groundLayer);
     }
 
     void Jump()
