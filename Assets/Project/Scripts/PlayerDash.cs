@@ -11,7 +11,6 @@ public class PlayerDash : MonoBehaviour
 
     private Animator animator;
     private Rigidbody rb;
-    private Animator animator;
     private bool isDashing = false;
     private float dashTimer = 0f;
     private float cooldownTimer = 0f;

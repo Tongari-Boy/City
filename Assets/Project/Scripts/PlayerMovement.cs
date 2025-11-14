@@ -23,46 +23,39 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        float horizontal = Input.GetAxis("Horizontal");
-        float vertical = Input.GetAxis("Vertical");
+        float h = Input.GetAxis("Horizontal");
+        float v = Input.GetAxis("Vertical");
 
-        //入力方向を「キャラのローカル空間」で扱う
-        moveInput = new Vector3(horizontal, 0, vertical);
+        moveInput = new Vector3(h, 0, v);
         moveInput = Vector3.ClampMagnitude(moveInput, 1f);
+
+        // カメラ基準の移動方向 ★
+        Vector3 camForward = cam.forward;
+        camForward.y = 0;
+        camForward.Normalize();
+
+        Vector3 camRight = cam.right;
+        camRight.y = 0;
+        camRight.Normalize();
+
+        moveDirection = camForward * moveInput.z + camRight * moveInput.x;
+        moveDirection.Normalize();
+
+        // Rigidbody 移動
+        Vector3 velocity = moveDirection * moveSpeed;
+        velocity.y = rb.velocity.y;
+        rb.velocity = velocity;
+
+        // 移動方向がある時だけキャラを回転させる（TPSらしい挙動）★
+        if (moveDirection.magnitude > 0.1f)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
+            rb.rotation = Quaternion.Lerp(rb.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime);
+        }
 
         // アニメーション制御
         float speed = moveInput.magnitude * moveSpeed;
         if (animator != null)
             animator.SetFloat("Speed", speed);
-    }
-
-    void FixedUpdate()
-    {
-        //カメラ基準ではなく、キャラの向きで移動
-        moveDirection = transform.TransformDirection(moveInput);
-        Vector3 velocity = moveDirection * moveSpeed;
-        velocity.y = rb.velocity.y;
-        rb.velocity = velocity;
-
-        if (moveInput != Vector3.zero)
-        {
-            // 前後移動があるときだけ回転
-            if (Mathf.Abs(moveInput.z) > 0.1f)
-            {
-                Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
-                rb.rotation = Quaternion.Lerp(rb.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime);
-            }
-        }
-        else
-        {
-            // 停止中はカメラ方向を向く
-            Vector3 camForward = cam.forward;
-            camForward.y = 0;
-            if (camForward.sqrMagnitude > 0.01f)
-            {
-                Quaternion camRot = Quaternion.LookRotation(camForward);
-                rb.rotation = Quaternion.Lerp(rb.rotation, camRot, idleAlignSpeed * Time.fixedDeltaTime);
-            }
-        }
     }
 }
