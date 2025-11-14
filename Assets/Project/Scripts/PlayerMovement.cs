@@ -46,13 +46,16 @@ public class PlayerMovement : MonoBehaviour
 
         if (moveInput != Vector3.zero)
         {
-            //“ü—Í•ûŒü‚É‰ñ“]
-            Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
-            rb.rotation = Quaternion.Lerp(rb.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime);
+            // ‘OŒãˆÚ“®‚ª‚ ‚é‚Æ‚«‚¾‚¯‰ñ“]
+            if (Mathf.Abs(moveInput.z) > 0.1f)
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
+                rb.rotation = Quaternion.Lerp(rb.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime);
+            }
         }
         else
         {
-            //’âŽ~’†‚Í‚ä‚Á‚­‚èƒJƒƒ‰•ûŒü‚ðŒü‚­
+            // ’âŽ~’†‚ÍƒJƒƒ‰•ûŒü‚ðŒü‚­
             Vector3 camForward = cam.forward;
             camForward.y = 0;
             if (camForward.sqrMagnitude > 0.01f)
