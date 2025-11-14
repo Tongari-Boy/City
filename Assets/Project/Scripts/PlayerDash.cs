@@ -11,6 +11,7 @@ public class PlayerDash : MonoBehaviour
 
     private Animator animator;
     private Rigidbody rb;
+    private Animator animator;
     private bool isDashing = false;
     private float dashTimer = 0f;
     private float cooldownTimer = 0f;
@@ -28,6 +29,12 @@ public class PlayerDash : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.LeftShift) && cooldownTimer <= 0 && !isDashing)
         {
             StartCoroutine(DoDash());
+
+            // アニメーション制御
+            if (animator != null)
+            {
+                animator.SetTrigger("DashTrigger");
+            }
         }
     }
 
