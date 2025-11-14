@@ -358,7 +358,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da3a675ba3a59864aa5aefbc2c7fcebb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dashForce: 30
+  dashForce: 25
   dashDuration: 0.2
   dashCooldown: 1
 --- !u!1 &548648184
@@ -458,10 +458,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 547161949}
-  distance: 5
-  height: 2
+  distance: 3
+  height: 1
   followSmoothTime: 0.1
-  rotationSpeed: 3
+  rotationSpeed: 2
 --- !u!4 &768063900 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400066, guid: 8f0565f23a2b58541a475bd3c1393052, type: 3}

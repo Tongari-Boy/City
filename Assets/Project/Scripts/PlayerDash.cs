@@ -8,6 +8,8 @@ public class PlayerDash : MonoBehaviour
     public float dashDuration = 0.2f;
     public float dashCooldown = 1f;
 
+
+    private Animator animator;
     private Rigidbody rb;
     private Animator animator;
     private bool isDashing = false;
@@ -38,6 +40,8 @@ public class PlayerDash : MonoBehaviour
 
     private System.Collections.IEnumerator DoDash()
     {
+        Debug.Log("Dash!");
+        
         isDashing = true;
         cooldownTimer = dashCooldown;
 
@@ -49,6 +53,12 @@ public class PlayerDash : MonoBehaviour
             rb.velocity = dashDirection * dashForce;
             timer += Time.deltaTime;
             yield return null;
+        }
+
+        // ダッシュアニメーションを再生
+        if (animator != null)
+        {
+            animator.SetTrigger("DashTrigger");
         }
 
         isDashing = false;
