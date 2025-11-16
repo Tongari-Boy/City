@@ -11,6 +11,10 @@ public class PlayerCameraController : MonoBehaviour
     public float followSmoothTime = 0.1f; // 追従スムーズ時間
     public float rotationSpeed = 3f;     // 回転速度
 
+    [Header("遮蔽処理")]
+    public float collisionRadius = 0.2f;  // カメラの当たり判定
+    public LayerMask collisionMask;        // 地面・壁レイヤー
+
     private Vector3 currentVelocity;
     private float yaw;
     private float pitch;
@@ -44,9 +48,26 @@ public class PlayerCameraController : MonoBehaviour
 
         Quaternion rotation = Quaternion.Euler(pitch, yaw, 0);
 
-        //プレイヤーを追従する位置（スムーズ補間）
-        Vector3 targetPosition = target.position + Vector3.up * height - rotation * Vector3.forward * distance;
-        transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref currentVelocity, followSmoothTime);
+        // まず理想のカメラ位置を計算
+        Vector3 targetBase = target.position + Vector3.up * height;
+        Vector3 desiredPosition = targetBase - rotation * Vector3.forward * distance;
+
+        // プレイヤー → 理想位置 へ SphereCast（カメラ衝突）
+        if (Physics.SphereCast(
+                targetBase,
+                collisionRadius,
+                (desiredPosition - targetBase).normalized,
+                out RaycastHit hit,
+                distance,
+                collisionMask))
+        {
+            // 衝突地点の少し手前にカメラを寄せる
+            desiredPosition = hit.point + hit.normal * collisionRadius;
+        }
+
+        // スムーズ追従
+        transform.position = Vector3.SmoothDamp(transform.position, desiredPosition, ref currentVelocity, followSmoothTime);
+
 
         transform.rotation = rotation;
     }

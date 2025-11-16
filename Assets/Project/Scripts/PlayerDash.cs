@@ -5,31 +5,57 @@ public class PlayerDash : MonoBehaviour
 {
     [Header("ダッシュ設定")]
     public float dashForce = 10f;
-    public float dashDuration = 0.2f;
-    public float dashCooldown = 1f;
+    public float dashStaminaCostPerSec = 20f; //毎秒消費するスタミナ
+    public float dashStartCost = 10f;         //押した瞬間の初期消費（任意）
 
+    [Header("スタミナ設定")]
+    public float dashStaminaCost = 20f;
 
     private Animator animator;
     private Rigidbody rb;
+    private PlayerStatus status;
+
     private bool isDashing = false;
-    private float dashTimer = 0f;
     private float cooldownTimer = 0f;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
+        status = GetComponent<PlayerStatus>();
     }
 
     void Update()
     {
-        cooldownTimer -= Time.deltaTime;
-
-        if (Input.GetKeyDown(KeyCode.LeftShift) && cooldownTimer <= 0 && !isDashing)
+        //Shiftキーでダッシュ開始
+        if (Input.GetKeyDown(KeyCode.LeftShift))
         {
-            StartCoroutine(DoDash());
+            TryStartDash();
+        }
 
-            // アニメーション制御
+        //Shiftキー離したらダッシュ終了
+        if (Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            StopDash();
+        }
+
+        //ダッシュ中の処理
+        if (isDashing)
+        {
+            DashUpdate();
+        }
+    }
+
+    void TryStartDash()
+    {
+        //スタミナが足りているか確認
+        if (status.currentStamina >= dashStartCost)
+        {
+            status.currentStamina -= dashStartCost;
+
+            isDashing = true;
+            status.isDashing = true;
+
             if (animator != null)
             {
                 animator.SetTrigger("DashTrigger");
@@ -37,29 +63,27 @@ public class PlayerDash : MonoBehaviour
         }
     }
 
-    private System.Collections.IEnumerator DoDash()
+    void StopDash()
     {
-        Debug.Log("Dash!");
-        
-        isDashing = true;
-        cooldownTimer = dashCooldown;
-
-        Vector3 dashDirection = transform.forward;
-        float timer = 0f;
-
-        while (timer < dashDuration)
-        {
-            rb.velocity = dashDirection * dashForce;
-            timer += Time.deltaTime;
-            yield return null;
-        }
-
-        // ダッシュアニメーションを再生
-        if (animator != null)
-        {
-            animator.SetTrigger("DashTrigger");
-        }
-
         isDashing = false;
+        status.isDashing = false;
+        rb.velocity = Vector3.zero;
+    }
+
+    void DashUpdate()
+    {
+        //前方にダッシュ力を加える
+        rb.velocity = transform.forward * dashForce;
+
+        //スタミナを消費
+        float staminaCost = dashStaminaCostPerSec * Time.deltaTime;
+        status.currentStamina -= staminaCost;
+
+        //スタミナが尽きたらダッシュ終了
+        if (status.currentStamina <= 0f)
+        {
+            status.currentStamina = 0f;
+            StopDash();
+        }
     }
 }
