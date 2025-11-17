@@ -6,14 +6,14 @@ public class PlayerCameraController : MonoBehaviour
     public Transform target;  // プレイヤー
 
     [Header("カメラ設定")]
-    public float distance = 5f;          // プレイヤーとの距離
-    public float height = 2f;            // カメラの高さ
-    public float followSmoothTime = 0.1f; // 追従スムーズ時間
-    public float rotationSpeed = 3f;     // 回転速度
+    public float distance = 5f;             // プレイヤーとの距離
+    public float height = 2f;               // カメラの高さ
+    public float followSmoothTime = 0.1f;   // 追従スムーズ時間
+    public float rotationSpeed = 3f;        // 回転速度
 
     [Header("遮蔽処理")]
-    public float collisionRadius = 0.2f;  // カメラの当たり判定
-    public LayerMask collisionMask;        // 地面・壁レイヤー
+    public float collisionRadius = 0.2f;    // カメラの当たり判定
+    public LayerMask collisionMask;         // 地面・壁レイヤー
 
     private Vector3 currentVelocity;
     private float yaw;

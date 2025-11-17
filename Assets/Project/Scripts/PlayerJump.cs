@@ -51,8 +51,6 @@ public class PlayerJump : MonoBehaviour
         rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
         rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
 
-        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-
         // ジャンプトリガーをセット
         animator.SetTrigger("JumpTrigger");
     }
