@@ -11,8 +11,8 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody rb;
     private Animator animator;
     private Transform cam;
-    private Vector3 moveInput;     // 入力された移動方向
-    private Vector3 moveDirection; // 実際の移動方向
+    private Vector3 moveInput;     //入力された移動方向
+    private Vector3 moveDirection; //実際の移動方向
 
     void Start()
     {
@@ -29,7 +29,7 @@ public class PlayerMovement : MonoBehaviour
         moveInput = new Vector3(h, 0, v);
         moveInput = Vector3.ClampMagnitude(moveInput, 1f);
 
-        // カメラ基準の移動方向 ★
+        //カメラ基準の移動方向
         Vector3 camForward = cam.forward;
         camForward.y = 0;
         camForward.Normalize();
@@ -41,19 +41,19 @@ public class PlayerMovement : MonoBehaviour
         moveDirection = camForward * moveInput.z + camRight * moveInput.x;
         moveDirection.Normalize();
 
-        // Rigidbody 移動
+        //Rigidbody 移動
         Vector3 velocity = moveDirection * moveSpeed;
         velocity.y = rb.velocity.y;
         rb.velocity = velocity;
 
-        // 移動方向がある時だけキャラを回転させる（TPSらしい挙動）★
+        //移動方向がある時だけキャラを回転させる
         if (moveDirection.magnitude > 0.1f)
         {
             Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
             rb.rotation = Quaternion.Lerp(rb.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime);
         }
 
-        // アニメーション制御
+        //アニメーション制御
         float speed = moveInput.magnitude * moveSpeed;
         if (animator != null)
             animator.SetFloat("Speed", speed);

@@ -58,7 +58,7 @@ public class PlayerDash : MonoBehaviour
 
             if (animator != null)
             {
-                animator.SetTrigger("DashTrigger");
+                animator.SetBool("IsDashing", true);
             }
         }
     }
@@ -68,6 +68,11 @@ public class PlayerDash : MonoBehaviour
         isDashing = false;
         status.isDashing = false;
         rb.velocity = Vector3.zero;
+
+        if (animator != null)
+        {
+            animator.SetBool("IsDashing", false);
+        }
     }
 
     void DashUpdate()

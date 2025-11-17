@@ -16,6 +16,7 @@ public class PlayerStatus : MonoBehaviour
     [Header("状態フラグ")]
     public bool isDashing = false;
 
+
     [Header("スタミナ回復設定")]
     public float staminaRegenPerSec = 10f;
 
