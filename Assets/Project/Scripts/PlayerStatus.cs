@@ -9,13 +9,12 @@ public class PlayerStatus : MonoBehaviour
     public float maxHealth = 100f;
     public float maxStamina = 100f;
 
-
     public float currentHealth;
     public float currentStamina;
 
     [Header("状態フラグ")]
     public bool isDashing = false;
-
+    public bool isGrounded = false;
 
     [Header("スタミナ回復設定")]
     public float staminaRegenPerSec = 10f;
@@ -39,7 +38,7 @@ public class PlayerStatus : MonoBehaviour
             staminaCircle.fillAmount = 1f; // 最大値
         }
 
-        // 最初は完全表示
+        // 最初は完全非表示
         if (staminaUIGroup != null)
         {
             staminaUIGroup.alpha = 0f;
@@ -54,7 +53,7 @@ public class PlayerStatus : MonoBehaviour
             currentStamina = Mathf.Min(
                 maxStamina,
                 currentStamina + staminaRegenPerSec * Time.deltaTime
-            );
+             );
         }
 
         //UI更新

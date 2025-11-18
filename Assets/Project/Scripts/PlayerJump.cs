@@ -8,6 +8,9 @@ public class PlayerJump : MonoBehaviour
     public LayerMask groundLayer; // 地面レイヤー
     public float groundCheckDistance = 0.2f; // 地面チェックの距離
 
+    [Header("地面チェック")]
+    public float groundRayOffset = 0.5f;
+
     private Rigidbody rb;
     private bool isGrounded;
     private Animator animator = null;
@@ -32,8 +35,8 @@ public class PlayerJump : MonoBehaviour
             Debug.Log("isGrounded");
         }
 
-            // スペースキーでジャンプ
-            if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        // スペースキーでジャンプ
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
             Debug.Log("Space Pressed!");
             Jump();
@@ -42,8 +45,17 @@ public class PlayerJump : MonoBehaviour
 
     void CheckGrounded()
     {
-        // プレイヤーの足元から下方向にRayを飛ばして接地判定
-        isGrounded = Physics.Raycast(transform.position, Vector3.down, groundCheckDistance + 0.2f, groundLayer);
+        Vector3 origin = transform.position + Vector3.up * groundRayOffset;
+
+        isGrounded = Physics.Raycast(
+            origin,
+            Vector3.down,
+            groundCheckDistance + 0.2f,
+            groundLayer
+        );
+
+        //PlayerStatusのisGroundedも更新
+        GetComponent<PlayerStatus>().isGrounded = isGrounded;
     }
 
     void Jump()
@@ -59,6 +71,12 @@ public class PlayerJump : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
-        Gizmos.DrawLine(transform.position, transform.position + Vector3.down * (groundCheckDistance + 0.1f));
+        Vector3 origin = transform.position + Vector3.up * groundRayOffset;
+
+        Gizmos.DrawLine(
+            origin,
+            origin + Vector3.down * (groundCheckDistance + 0.2f)
+        );
+
     }
 }

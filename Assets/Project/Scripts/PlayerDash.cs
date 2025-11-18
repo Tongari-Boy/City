@@ -48,6 +48,14 @@ public class PlayerDash : MonoBehaviour
 
     void TryStartDash()
     {
+        //ジャンプ中はダッシュしない
+        if(!status.isGrounded)
+            return;
+
+        //移動入力が無いならダッシュ開始しない
+        if (rb.velocity.magnitude < 0.1f)
+            return;
+
         //スタミナが足りているか確認
         if (status.currentStamina >= dashStartCost)
         {
@@ -77,12 +85,26 @@ public class PlayerDash : MonoBehaviour
 
     void DashUpdate()
     {
+        //移動入力がなくなったらダッシュ終了
+        if (rb.velocity.magnitude < 0.1f)
+        {
+            StopDash();
+            return;
+        }
+
         //前方にダッシュ力を加える
         rb.velocity = transform.forward * dashForce;
 
         //スタミナを消費
         float staminaCost = dashStaminaCostPerSec * Time.deltaTime;
         status.currentStamina -= staminaCost;
+
+        //ダッシュ中にジャンプしたとき
+        if (!status.isGrounded)
+        {
+            StopDash();
+            return;
+        }
 
         //スタミナが尽きたらダッシュ終了
         if (status.currentStamina <= 0f)
