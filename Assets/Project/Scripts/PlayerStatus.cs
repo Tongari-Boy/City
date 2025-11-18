@@ -26,7 +26,6 @@ public class PlayerStatus : MonoBehaviour
     public float hideDelay = 0.5f;       //満タン後に消すまでの時間
 
     private float hideTimer = 0f;
-    private bool isFading = false;
 
     void Start()
     {
@@ -67,7 +66,6 @@ public class PlayerStatus : MonoBehaviour
         {
             ShowUI();
             hideTimer = 0f;        // ディレイ用タイマーをリセット
-            isFading = false;      // フェード中断
             return;
         }
 

@@ -11,14 +11,12 @@ public class Enemy : MonoBehaviour
     float shotInterval = 0;
     float shotIntervalMax = 1.0f;
 
-    // Start is called before the first frame update
     void Start()
     {
         //ターゲットを取得
         target = GameObject.Find("PlayerTarget");
     }
 
-    // Update is called once per frame
     void Update()
     {
         //ターゲットの方向を向く

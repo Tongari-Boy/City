@@ -31,7 +31,7 @@ public class PlayerCrouch : MonoBehaviour
         targetHeight = standingHeight;
     }
 
-    void Update()
+    void LateUpdate()
     {
         if (Input.GetKeyDown(crouchKey))
         {

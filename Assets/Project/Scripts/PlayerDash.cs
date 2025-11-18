@@ -6,7 +6,7 @@ public class PlayerDash : MonoBehaviour
     [Header("ダッシュ設定")]
     public float dashForce = 10f;
     public float dashStaminaCostPerSec = 20f; //毎秒消費するスタミナ
-    public float dashStartCost = 10f;         //押した瞬間の初期消費（任意）
+    public float dashStartCost = 10f;         //押した瞬間の初期消費(再びダッシュするときの判定に利用)
 
     [Header("スタミナ設定")]
     public float dashStaminaCost = 20f;
@@ -16,7 +16,6 @@ public class PlayerDash : MonoBehaviour
     private PlayerStatus status;
 
     private bool isDashing = false;
-    private float cooldownTimer = 0f;
 
     void Start()
     {
@@ -25,7 +24,7 @@ public class PlayerDash : MonoBehaviour
         status = GetComponent<PlayerStatus>();
     }
 
-    void Update()
+    void LateUpdate()
     {
         //Shiftキーでダッシュ開始
         if (Input.GetKeyDown(KeyCode.LeftShift))

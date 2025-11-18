@@ -21,7 +21,7 @@ public class PlayerMovement : MonoBehaviour
         cam = Camera.main.transform;
     }
 
-    void Update()
+    void LateUpdate()
     {
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
