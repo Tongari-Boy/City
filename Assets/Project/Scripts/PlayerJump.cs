@@ -21,7 +21,7 @@ public class PlayerJump : MonoBehaviour
         rb = GetComponent<Rigidbody>();
     }
 
-    void Update()
+    void LateUpdate()
     {
         CheckGrounded();
 
