@@ -6,42 +6,44 @@ public class PlayerJump : MonoBehaviour
     [Header("ジャンプ設定")]
     public float jumpForce = 5f; // ジャンプの強さ
     public LayerMask groundLayer; // 地面レイヤー
-    public float groundCheckDistance = 0.2f; // 地面チェックの距離
+    public float groundCheckDistance; // 地面チェックの距離
 
     [Header("地面チェック")]
-    public float groundRayOffset = 0.5f;
+    public float groundRayOffset;
 
     private Rigidbody rb;
+    private Animator animator;
+    private PlayerStatus status;
+
+    private bool jumpPressed;
     private bool isGrounded;
-    private Animator animator = null;
 
     void Start()
     {
-        animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
+        animator = GetComponent<Animator>();
+        status = GetComponent<PlayerStatus>();
     }
 
-    void LateUpdate()
+    void Update()
     {
+        jumpPressed = Input.GetKeyDown(KeyCode.Space);
+
         CheckGrounded();
 
         // Animatorにパラメータを送る
-        float speed = new Vector3(rb.velocity.x, 0, rb.velocity.z).magnitude;
-        animator.SetFloat("Speed", speed);
         animator.SetBool("IsGrounded", isGrounded);
+        animator.SetFloat("Speed", new Vector3(rb.velocity.x, 0, rb.velocity.z).magnitude);
 
-        if (isGrounded)
-        {
-            Debug.Log("isGrounded");
-        }
+    }
 
-        // スペースキーでジャンプ
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+    void FixedUpdate()
+    {
+        if (jumpPressed && isGrounded)
         {
-            Debug.Log("Space Pressed!");
             Jump();
         }
-    }
+    }   
 
     void CheckGrounded()
     {
@@ -50,16 +52,19 @@ public class PlayerJump : MonoBehaviour
         isGrounded = Physics.Raycast(
             origin,
             Vector3.down,
-            groundCheckDistance + 0.2f,
+            groundCheckDistance,
             groundLayer
         );
 
-        //PlayerStatusのisGroundedも更新
-        GetComponent<PlayerStatus>().isGrounded = isGrounded;
+        status.isGrounded = isGrounded;
     }
 
     void Jump()
     {
+        //ダッシュ中ならダッシュを解除
+        status.isDashing = false;
+
+        //Y速度初期化→ジャンプ力付与
         rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
         rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
 
@@ -77,6 +82,5 @@ public class PlayerJump : MonoBehaviour
             origin,
             origin + Vector3.down * (groundCheckDistance + 0.2f)
         );
-
     }
 }

@@ -15,7 +15,8 @@ public class PlayerDash : MonoBehaviour
     private Rigidbody rb;
     private PlayerStatus status;
 
-    private bool isDashing = false;
+    private bool dashPressed;
+    private bool dashReleased;
 
     void Start()
     {
@@ -24,22 +25,28 @@ public class PlayerDash : MonoBehaviour
         status = GetComponent<PlayerStatus>();
     }
 
-    void LateUpdate()
+    void Update()
     {
-        //Shiftキーでダッシュ開始
-        if (Input.GetKeyDown(KeyCode.LeftShift))
+        dashPressed = Input.GetKeyDown(KeyCode.LeftShift);
+        dashReleased = Input.GetKeyUp(KeyCode.LeftShift);
+
+        //ダッシュ開始
+        if (dashPressed)
         {
             TryStartDash();
         }
 
-        //Shiftキー離したらダッシュ終了
-        if (Input.GetKeyUp(KeyCode.LeftShift))
+        //ダッシュ終了
+        if (dashReleased)
         {
             StopDash();
         }
+    }
 
-        //ダッシュ中の処理
-        if (isDashing)
+    void FixedUpdate()
+    {
+            //ダッシュ中の処理
+            if (status.isDashing)
         {
             DashUpdate();
         }
@@ -55,12 +62,11 @@ public class PlayerDash : MonoBehaviour
         if (rb.velocity.magnitude < 0.1f)
             return;
 
-        //スタミナが足りているか確認
+        //スタミナが足りているか
         if (status.currentStamina >= dashStartCost)
         {
             status.currentStamina -= dashStartCost;
 
-            isDashing = true;
             status.isDashing = true;
 
             if (animator != null)
@@ -72,9 +78,7 @@ public class PlayerDash : MonoBehaviour
 
     void StopDash()
     {
-        isDashing = false;
         status.isDashing = false;
-        rb.velocity = Vector3.zero;
 
         if (animator != null)
         {
@@ -85,25 +89,20 @@ public class PlayerDash : MonoBehaviour
     void DashUpdate()
     {
         //移動入力がなくなったらダッシュ終了
-        if (rb.velocity.magnitude < 0.1f)
-        {
-            StopDash();
-            return;
-        }
-
-        //前方にダッシュ力を加える
-        rb.velocity = transform.forward * dashForce;
-
-        //スタミナを消費
-        float staminaCost = dashStaminaCostPerSec * Time.deltaTime;
-        status.currentStamina -= staminaCost;
-
-        //ダッシュ中にジャンプしたとき
         if (!status.isGrounded)
         {
             StopDash();
             return;
         }
+
+        //ダッシュ方向に速度を設定
+        Vector3 dashVel = transform.forward * dashForce;
+        dashVel.y = rb.velocity.y;
+        rb.velocity = dashVel;
+
+        //スタミナを消費
+        float staminaCost = dashStaminaCostPerSec * Time.deltaTime;
+        status.currentStamina -= staminaCost;
 
         //スタミナが尽きたらダッシュ終了
         if (status.currentStamina <= 0f)
