@@ -396,7 +396,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 161632074372843874, guid: a890c54186fcd6a40882aa2dace7d361, type: 3}
       propertyPath: dashForce
-      value: 200
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 2086747021823951550, guid: a890c54186fcd6a40882aa2dace7d361, type: 3}
       propertyPath: m_Name
@@ -442,6 +442,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7649610699801064152, guid: a890c54186fcd6a40882aa2dace7d361, type: 3}
+      propertyPath: groundCheckDistance
+      value: 0.11
+      objectReference: {fileID: 0}
     - target: {fileID: 7682452026470980124, guid: a890c54186fcd6a40882aa2dace7d361, type: 3}
       propertyPath: staminaCircle
       value: 
@@ -480,10 +484,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: Canvas
       objectReference: {fileID: 0}
+    - target: {fileID: 3843609327687199827, guid: e9500882db5a3eb47a0e2c78ac8e6caa, type: 3}
+      propertyPath: m_FillOrigin
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3843609327687199827, guid: e9500882db5a3eb47a0e2c78ac8e6caa, type: 3}
+      propertyPath: m_FillClockwise
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5095920135063144093, guid: e9500882db5a3eb47a0e2c78ac8e6caa, type: 3}
       propertyPath: target
       value: 
       objectReference: {fileID: 1855720450}
+    - target: {fileID: 5095920135063144093, guid: e9500882db5a3eb47a0e2c78ac8e6caa, type: 3}
+      propertyPath: offset.x
+      value: -40
+      objectReference: {fileID: 0}
+    - target: {fileID: 5095920135063144093, guid: e9500882db5a3eb47a0e2c78ac8e6caa, type: 3}
+      propertyPath: offset.y
+      value: 150
+      objectReference: {fileID: 0}
     - target: {fileID: 7101942243443387942, guid: e9500882db5a3eb47a0e2c78ac8e6caa, type: 3}
       propertyPath: m_Pivot.x
       value: 0

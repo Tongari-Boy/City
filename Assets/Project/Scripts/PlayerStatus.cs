@@ -37,7 +37,7 @@ public class PlayerStatus : MonoBehaviour
             staminaCircle.fillAmount = 1f; // 最大値
         }
 
-        // 最初は完全非表示
+        //最初は完全非表示
         if (staminaUIGroup != null)
         {
             staminaUIGroup.alpha = 0f;
@@ -65,11 +65,11 @@ public class PlayerStatus : MonoBehaviour
         if (currentStamina < maxStamina)
         {
             ShowUI();
-            hideTimer = 0f;        // ディレイ用タイマーをリセット
+            hideTimer = 0f;        //ディレイ用タイマーをリセット
             return;
         }
 
-        //満タン：フェードアウト開始タイマー
+        //満タン:フェードアウト開始タイマー
         hideTimer += Time.deltaTime;
 
         //ディレイ時間未満なら何もしない

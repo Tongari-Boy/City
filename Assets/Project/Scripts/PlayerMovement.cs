@@ -11,6 +11,7 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody rb;
     private Animator animator;
     private Transform cam;
+
     private Vector3 moveInput;     //入力された移動方向
     private Vector3 moveDirection; //実際の移動方向
 
@@ -21,41 +22,42 @@ public class PlayerMovement : MonoBehaviour
         cam = Camera.main.transform;
     }
 
-    void LateUpdate()
+    //マウス入力受付
+    void Update()
     {
-        float h = Input.GetAxis("Horizontal");
-        float v = Input.GetAxis("Vertical");
+        float h = Input.GetAxisRaw("Horizontal");
+        float v = Input.GetAxisRaw("Vertical");
 
-        moveInput = new Vector3(h, 0, v);
-        moveInput = Vector3.ClampMagnitude(moveInput, 1f);
+        moveInput = new Vector3(h, 0, v).normalized;
 
         //カメラ基準の移動方向
-        Vector3 camForward = cam.forward;
-        camForward.y = 0;
-        camForward.Normalize();
-
-        Vector3 camRight = cam.right;
-        camRight.y = 0;
-        camRight.Normalize();
+        Vector3 camForward = cam.forward; camForward.y = 0; camForward.Normalize();
+        Vector3 camRight = cam.right; camRight.y = 0; camRight.Normalize();
 
         moveDirection = camForward * moveInput.z + camRight * moveInput.x;
-        moveDirection.Normalize();
+    }
 
-        //Rigidbody 移動
-        Vector3 velocity = moveDirection * moveSpeed;
-        velocity.y = rb.velocity.y;
-        rb.velocity = velocity;
-
-        //移動方向がある時だけキャラを回転させる
-        if (moveDirection.magnitude > 0.1f)
+    //プレイヤの回転と移動
+    void FixedUpdate()
+    {
+        //ダッシュがないときだけ移動処理
+        if (!GetComponent<PlayerStatus>().isDashing)
         {
-            Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
-            rb.rotation = Quaternion.Lerp(rb.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime);
+            Vector3 vel = moveDirection * moveSpeed;
+            vel.y = rb.velocity.y;
+            rb.velocity = vel;
+        }
+
+
+        //移動方向がある時だけキャラを回転 
+        if (moveDirection.sqrMagnitude > 0.1f)
+        {
+            Quaternion targetRot = Quaternion.LookRotation(moveDirection);
+            rb.rotation = Quaternion.Lerp(rb.rotation, targetRot, rotationSpeed * Time.fixedDeltaTime);
         }
 
         //アニメーション制御
-        float speed = moveInput.magnitude * moveSpeed;
         if (animator != null)
-            animator.SetFloat("Speed", speed);
+            animator.SetFloat("Speed", moveInput.magnitude * moveSpeed);
     }
 }
