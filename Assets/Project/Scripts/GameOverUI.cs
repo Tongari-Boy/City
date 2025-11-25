@@ -12,14 +12,12 @@ public class GameOverUI : MonoBehaviour
 
     public void RestartGame()
     {
-        Debug.Log("Restarting Game");
         SceneManager.LoadScene("Enemy");
         //‚¢‚Â‚©Main‚É‚·‚éª
     }
 
     public void GoToTitle()
     {
-        Debug.Log("Going to Title Screen");
         SceneManager.LoadScene("Title");
     }
 }
