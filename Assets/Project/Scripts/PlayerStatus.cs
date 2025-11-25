@@ -29,6 +29,7 @@ public class PlayerStatus : MonoBehaviour
 
     void Start()
     {
+        currentHealth = maxHealth;
         currentStamina = maxStamina;
 
         //UI初期化
@@ -65,7 +66,7 @@ public class PlayerStatus : MonoBehaviour
         if (currentStamina < maxStamina)
         {
             ShowUI();
-            hideTimer = 0f;        //ディレイ用タイマーをリセット
+            hideTimer = 0f;        //ディレイ用タイマーのリセット
             return;
         }
 
@@ -99,5 +100,16 @@ public class PlayerStatus : MonoBehaviour
         {
             staminaUIGroup.alpha -= Time.deltaTime / fadeDuration;
         }
+    }
+
+    public void TakeDamage(float damage)
+    {
+        currentHealth -= damage;
+
+        if (currentHealth <= 0)
+        {
+            currentHealth = 0;
+        }
+        Debug.Log("Player Health: " + currentHealth);
     }
 }
