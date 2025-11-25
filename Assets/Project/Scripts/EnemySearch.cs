@@ -16,7 +16,7 @@ public class EnemySearch : MonoBehaviour
     }
 
     //敵視野にターゲットがいるか 判定
-    bool IsInView()
+    public bool IsInView()
     {
         //ターゲットまでの方向と距離
         Vector3 dirToTarget = (target.position - transform.position).normalized;

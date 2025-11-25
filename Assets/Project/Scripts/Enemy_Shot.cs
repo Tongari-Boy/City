@@ -4,12 +4,16 @@ using UnityEngine;
 
 public class Enemy_Shot : MonoBehaviour
 {
-    private PlayerStatus status;
     public GameObject shot;
+    public Transform muzzle;
+    public float shotInterval = 1f;
+
+    private float timer = 0f;
+    private EnemySearch search;
 
     void Start()
     {
-        status = GameObject.Find("Player").GetComponent<PlayerStatus>();
+        search = GetComponent<EnemySearch>();
     }
 
     void Update()
@@ -19,6 +23,15 @@ public class Enemy_Shot : MonoBehaviour
 
     void Shot()
     {
-        Instantiate(shot, transform.position, transform.rotation);
+        if (search.IsInView())
+        {
+            timer += Time.deltaTime;
+
+            if (timer >= shotInterval)
+            {
+                Instantiate(shot, muzzle.position, muzzle.rotation);
+                timer = 0f;
+            }
+        }            
     }
 }
