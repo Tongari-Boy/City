@@ -122,6 +122,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!224 &101107196 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 7101942243443387942, guid: e9500882db5a3eb47a0e2c78ac8e6caa, type: 3}
+  m_PrefabInstance: {fileID: 2031827046}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &137909647
 GameObject:
   m_ObjectHideFlags: 0
@@ -1031,6 +1036,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1536800633
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1536800634}
+  m_Layer: 0
+  m_Name: HealthUIRoot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1536800634
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1536800633}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1.1072665, y: 1.1072665, z: 1.1072665}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1855758692}
+  m_Father: {fileID: 101107196}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1554659874
 GameObject:
   m_ObjectHideFlags: 0
@@ -1255,6 +1292,10 @@ PrefabInstance:
       value: 0.11
       objectReference: {fileID: 0}
     - target: {fileID: 7682452026470980124, guid: a890c54186fcd6a40882aa2dace7d361, type: 3}
+      propertyPath: healthBar
+      value: 
+      objectReference: {fileID: 1855758693}
+    - target: {fileID: 7682452026470980124, guid: a890c54186fcd6a40882aa2dace7d361, type: 3}
       propertyPath: isGrounded
       value: 0
       objectReference: {fileID: 0}
@@ -1295,6 +1336,81 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98b25f9c76e5593459dc6b93ace20590, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1855758691
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1855758692}
+  - component: {fileID: 1855758694}
+  - component: {fileID: 1855758693}
+  m_Layer: 0
+  m_Name: HealthUI
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1855758692
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1855758691}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1536800634}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -280, y: 180}
+  m_SizeDelta: {x: 150, y: 20}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1855758693
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1855758691}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 0
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 3
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 0
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1855758694
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1855758691}
+  m_CullTransparentMesh: 1
 --- !u!1 &1908352054
 GameObject:
   m_ObjectHideFlags: 0
@@ -1612,7 +1728,10 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 5095920135063144093, guid: e9500882db5a3eb47a0e2c78ac8e6caa, type: 3}
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 7101942243443387942, guid: e9500882db5a3eb47a0e2c78ac8e6caa, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1536800634}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e9500882db5a3eb47a0e2c78ac8e6caa, type: 3}
 --- !u!1660057539 &9223372036854775807
@@ -1622,7 +1741,6 @@ SceneRoots:
   - {fileID: 1554659876}
   - {fileID: 1851547451}
   - {fileID: 299845524}
-  - {fileID: 2031827046}
   - {fileID: 275613165}
   - {fileID: 1109443079}
   - {fileID: 960659059}
@@ -1631,3 +1749,4 @@ SceneRoots:
   - {fileID: 1908352057}
   - {fileID: 998759799}
   - {fileID: 1845963882}
+  - {fileID: 2031827046}

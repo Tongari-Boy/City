@@ -19,7 +19,10 @@ public class PlayerStatus : MonoBehaviour
     [Header("スタミナ回復設定")]
     public float staminaRegenPerSec = 10f;
 
-    [Header("UI")]
+    [Header("体力UI")]
+    public Image healthBar;
+
+    [Header("スタミナUI")]
     public Image staminaCircle;
     public CanvasGroup staminaUIGroup;
     public float fadeDuration = 0.5f;    //フェードアウト時間
@@ -31,8 +34,9 @@ public class PlayerStatus : MonoBehaviour
     {
         currentHealth = maxHealth;
         currentStamina = maxStamina;
+        UpdateHealthUI();
 
-        //UI初期化
+        //スタミナUI初期化
         if (staminaCircle != null)
         {
             staminaCircle.fillAmount = 1f; // 最大値
@@ -56,7 +60,7 @@ public class PlayerStatus : MonoBehaviour
              );
         }
 
-        //UI更新
+        //スタミナUI更新
         if (staminaCircle != null)
         {
             staminaCircle.fillAmount = currentStamina / maxStamina;
@@ -81,7 +85,7 @@ public class PlayerStatus : MonoBehaviour
         FadeOutUI();
     }
 
-    //UI表示
+    //スタミナUI表示
     void ShowUI()
     {
         if (staminaUIGroup != null)
@@ -111,5 +115,16 @@ public class PlayerStatus : MonoBehaviour
             currentHealth = 0;
         }
         Debug.Log("Player Health: " + currentHealth);
+
+        UpdateHealthUI();
+    }
+
+    public void UpdateHealthUI()
+    {
+        if(healthBar != null)
+        {
+            float normalized = maxHealth > 0 ? (float)currentHealth / maxHealth : 0f;
+            healthBar.fillAmount = Mathf.Clamp01(normalized);
+        }
     }
 }
