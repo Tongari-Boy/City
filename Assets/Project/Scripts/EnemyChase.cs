@@ -7,7 +7,7 @@ public class EnemyChase : MonoBehaviour
 
     private EnemySearch search;
     private Enemy_Patrol patrol;
-    private NavMeshAgent agent;
+    public NavMeshAgent agent;
     private Animator animator;
 
     void Start()
@@ -35,7 +35,7 @@ public class EnemyChase : MonoBehaviour
         animator.SetFloat("moveSpeed", agent.velocity.magnitude);
     }
 
-    void ChaseTarget()
+    public void ChaseTarget()
     {
         // パトロールを停止
         if (patrol != null)
@@ -50,7 +50,7 @@ public class EnemyChase : MonoBehaviour
         animator.SetBool("isChasing", true);
     }
 
-    void StopChase()
+    public void StopChase()
     {
         //Patrolがある場合はパトロール再開
         if (patrol != null)
