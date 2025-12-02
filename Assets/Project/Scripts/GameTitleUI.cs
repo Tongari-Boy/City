@@ -1,8 +1,10 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class GameOverUI : MonoBehaviour
+public class GameTitleUI : MonoBehaviour
 {
+    public GameObject ShowRecordPopup;
+
     void Start()
     {
         //カーソルを表示して動かせるようにする
@@ -10,14 +12,20 @@ public class GameOverUI : MonoBehaviour
         Cursor.visible = true;
     }
 
-    public void RestartGame()
+    public void StartGame()
     {
         SceneManager.LoadScene("Enemy");
         //いつかMainにする↑
     }
 
-    public void GoToTitle()
+    public void QuitGame()
     {
-        SceneManager.LoadScene("Title");
+        Application.Quit();
     }
+
+    public void OnClickShowRecords()
+    {
+        ShowRecordPopup.SetActive(true);
+    }
+
 }
