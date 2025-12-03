@@ -33,7 +33,7 @@ public class ShowRecordPopup : MonoBehaviour
 
         //データベースから記録を取得
         var records = db.connection.Query<ClearTimeRecord>(
-            "SELECT * FROM ClearTimeRecord ORDER BY time ASC"
+            "SELECT * FROM ClearTimeRecord ORDER BY time ASC Limit 15"
         );
 
         foreach (var record in records)
