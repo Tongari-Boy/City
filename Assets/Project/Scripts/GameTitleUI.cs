@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 public class GameTitleUI : MonoBehaviour
 {
     public GameObject ShowRecordPopup;
+    public GameObject HowToPlayPopup;
 
     void Start()
     {
@@ -28,4 +29,8 @@ public class GameTitleUI : MonoBehaviour
         ShowRecordPopup.SetActive(true);
     }
 
+    public void OnClickHowToPlay()
+    {
+        HowToPlayPopup.SetActive(true);
+    }
 }
