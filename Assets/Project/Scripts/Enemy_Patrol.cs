@@ -15,7 +15,7 @@ public class Enemy_Patrol : MonoBehaviour
     {
         agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
 
-        if(patrolPoints.Length > 0)
+        if (patrolPoints.Length > 0)
         {
             agent.speed = patrolSpeed;
             agent.SetDestination(patrolPoints[currentIndex].position);
@@ -30,7 +30,7 @@ public class Enemy_Patrol : MonoBehaviour
         if(patrolPoints.Length == 0)
             return;
 
-        //�ڕW�n�_�ɓ��������玟�̒n�_��
+        //パトロール
         if(!agent.pathPending && agent.remainingDistance <= patrolPointArrivalDistance)
         {
             currentIndex = (currentIndex + 1) % patrolPoints.Length;

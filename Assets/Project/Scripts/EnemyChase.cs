@@ -46,6 +46,7 @@ public class EnemyChase : MonoBehaviour
         agent.speed = chaseSpeed;
         agent.isStopped = false;
         agent.SetDestination(search.target.position);
+
         // チェイスアニメーションを有効にする
         animator.SetBool("isChasing", true);
     }
