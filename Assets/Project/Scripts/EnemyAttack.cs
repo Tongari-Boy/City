@@ -12,7 +12,8 @@ public class EnemyAttack : MonoBehaviour
     private Animator animator;
     private float lastAttackTime = 0f;
 
-    public float attackDuration = 1f;
+    public float attackDuration = 1f;   //攻撃アニメーションの長さ
+    public float attackingDuration = 1f;    //攻撃が当たったと判定される時間
 
 
     void Start()
@@ -46,11 +47,18 @@ public class EnemyAttack : MonoBehaviour
         //アニメーション
         animator.SetBool("isAttacking",true);
 
-        //ダメージ処理
-        PlayerStatus status = player.GetComponent<PlayerStatus>();
-        if (status != null)
+        StartCoroutine(AttackingCoroutine());
+
+        float distance = Vector3.Distance(transform.position, player.position);
+
+        if (distance <= chase.agent.stoppingDistance)
         {
-            status.TakeDamage(damange);
+            //ダメージ処理
+            PlayerStatus status = player.GetComponent<PlayerStatus>();
+            if (status != null)
+            {
+                status.TakeDamage(damange);
+            }
         }
 
         StartCoroutine(AttackCoroutine());
@@ -66,5 +74,10 @@ public class EnemyAttack : MonoBehaviour
         yield return new WaitForSeconds(attackDuration);
 
         StopAttack();
+    }
+
+    IEnumerator AttackingCoroutine()
+    {
+        yield return new WaitForSeconds(attackingDuration);
     }
 }
