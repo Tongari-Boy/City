@@ -9,6 +9,7 @@ public class EnemyChase : MonoBehaviour
     private Enemy_Patrol patrol;
     public NavMeshAgent agent;
     private Animator animator;
+    private EnemyAttack attack;
 
     void Start()
     {
@@ -16,12 +17,20 @@ public class EnemyChase : MonoBehaviour
         patrol = GetComponent<Enemy_Patrol>();
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
+        attack = GetComponent<EnemyAttack>();
     }
 
     void Update()
     {
-        if (agent == null || !agent.isOnNavMesh || search == null || search.target == null)
+        if (agent == null || !agent.isOnNavMesh || search == null || search.target == null) 
             return;
+
+        if (attack != null && attack.IsAttacking)
+        {
+            StopChase();
+            animator.SetFloat("moveSpeed", 0f);
+            return;
+        }
 
         if (search.IsInView())
         {
@@ -31,6 +40,7 @@ public class EnemyChase : MonoBehaviour
         {
             StopChase();
         }
+
         // 移動速度をAnimatorに送る
         animator.SetFloat("moveSpeed", agent.velocity.magnitude);
     }
@@ -45,24 +55,21 @@ public class EnemyChase : MonoBehaviour
 
         agent.speed = chaseSpeed;
         agent.isStopped = false;
-        agent.SetDestination(search.target.position);
 
+        //パスがないとき、止まりすぎたときに更新
+        if(!agent.hasPath || agent.remainingDistance > agent.stoppingDistance)
+        {
+            agent.SetDestination(search.target.position);
+        }
+        
         // チェイスアニメーションを有効にする
         animator.SetBool("isChasing", true);
     }
 
     public void StopChase()
     {
-        //Patrolがある場合はパトロール再開
-        if (patrol != null)
-        {
-            agent.isStopped = false;
-        }
-        else
-        {
-            agent.isStopped = true;
-        }
-
+        //常に止める
+        agent.isStopped = true;
         animator.SetBool("isChasing", false);
     }
 }

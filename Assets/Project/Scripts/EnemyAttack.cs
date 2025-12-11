@@ -1,6 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
+using System.Collections;
 
 public class EnemyAttack : MonoBehaviour
 {
@@ -8,18 +8,22 @@ public class EnemyAttack : MonoBehaviour
     public float damange = 10f;
     public float attackInterval = 1f;
 
+    public float attackWindowup = 0.2f;
+    public float attackHitTime = 0.35f;
+    public float attackDuration = 1f;
+
+    public bool IsAttacking { get;private set; }
+
     private EnemyChase chase;
     private Animator animator;
+    private UnityEngine.AI.NavMeshAgent agent;
     private float lastAttackTime = 0f;
-
-    public float attackDuration = 1f;   //UŒ‚ƒAƒjƒ[ƒVƒ‡ƒ“‚Ì’·‚³
-    public float attackingDuration = 1f;    //UŒ‚‚ª“–‚½‚Á‚½‚Æ”»’è‚³‚ê‚éŠÔ
-
 
     void Start()
     {
         chase = GetComponent<EnemyChase>();
         animator = GetComponent<Animator>();
+        agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
     }
 
     void Update()
@@ -29,55 +33,83 @@ public class EnemyAttack : MonoBehaviour
 
     void JudgeAttack()
     {
-        float distance = Vector3.Distance(transform.position, player.position);
+        if(IsAttacking || player == null || chase == null || agent == null)
+            { return; }
 
-        if (distance <= chase.agent.stoppingDistance &&
-            Time.time >= lastAttackTime + attackInterval)
+        float distance = Vector3.Distance(transform.position, player.position);
+        bool canAttack = distance <= this.agent.stoppingDistance && Time.time >= lastAttackTime + attackInterval;
+
+
+
+        if (canAttack)
         {
-            StartAttack();
+            StartCoroutine(PerformAttack());
         }       
     }
 
-    public void StartAttack()
+    IEnumerator PerformAttack()
     {
+        IsAttacking = true;
         lastAttackTime = Time.time;
 
-        chase.StopChase();
+        //ï¿½ÇÕ‚ï¿½ï¿½~ï¿½ßANavMeshï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½]ï¿½ï¿½ï¿½~ï¿½ß‚ï¿½
+        if (agent != null)
+        {
+            agent.isStopped = true;
+            agent.updateRotation = false;
+        }
 
-        //ƒAƒjƒ[ƒVƒ‡ƒ“
-        animator.SetBool("isAttacking",true);
+        //ï¿½ï¿½ï¿½ï¿½Ì•ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        Vector3 lookDir = player.position - transform.position;
+        lookDir.y = 0f;
+        if (lookDir.sqrMagnitude > 0.01f)
+        {
+            transform.rotation = Quaternion.LookRotation(lookDir);
+        }
 
-        StartCoroutine(AttackingCoroutine());
+        //ï¿½`ï¿½Fï¿½Cï¿½Xï¿½ğ–³Œï¿½ï¿½ï¿½ï¿½Aï¿½Uï¿½ï¿½ï¿½Jï¿½n
+        animator.SetBool("isChasing", false);
+        animator.SetTrigger("Attack");
+
+        //ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        yield return new WaitForSeconds(attackWindowup);
+
+        //ï¿½qï¿½bï¿½gï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½
+        ApplyDamageIfStillIRange();
+
+        //ï¿½qï¿½bï¿½gï¿½ï¿½`ï¿½Uï¿½ï¿½ï¿½Iï¿½ï¿½ï¿½Ü‚Å‘Ò‚ï¿½
+        float remainingAnim = Mathf.Max(0f, attackDuration - attackHitTime);
+        yield return new WaitForSeconds(remainingAnim);
+
+        //ï¿½ãˆï¿½ï¿½
+        IsAttacking = false;
+
+        if (agent != null)
+        {
+            agent.updateRotation = true;
+            agent.isStopped = false;
+        }
+
+        //ï¿½Uï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½Eï¿½É‚ï¿½ï¿½ï¿½Î’ÇÕ‚ï¿½ï¿½ÄŠJ
+        if (chase != null && player != null)
+        {
+            chase.ChaseTarget();
+        }
+    }
+
+    void ApplyDamageIfStillIRange()
+    {
+        if(player == null || agent == null)return;
 
         float distance = Vector3.Distance(transform.position, player.position);
-
-        if (distance <= chase.agent.stoppingDistance)
+        //ï¿½ï¿½ï¿½ï¿½ï¿½]ï¿½Tï¿½ï¿½ï¿½Â‚ï¿½ï¿½ï¿½
+        if(distance <= agent.stoppingDistance + 0.1f)
         {
-            //ƒ_ƒ[ƒWˆ—
-            PlayerStatus status = player.GetComponent<PlayerStatus>();
+            var status = player.GetComponent<PlayerStatus>();
             if (status != null)
             {
                 status.TakeDamage(damange);
             }
         }
-
-        StartCoroutine(AttackCoroutine());
-    }
-
-    public void StopAttack()
-    { 
-        animator.SetBool("isAttacking", false);
-    }
-
-    IEnumerator AttackCoroutine()
-    {
-        yield return new WaitForSeconds(attackDuration);
-
-        StopAttack();
-    }
-
-    IEnumerator AttackingCoroutine()
-    {
-        yield return new WaitForSeconds(attackingDuration);
     }
 }
