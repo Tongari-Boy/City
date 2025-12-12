@@ -119,6 +119,19 @@ public class PlayerStatus : MonoBehaviour
         UpdateHealthUI();
     }
 
+    public void Resolve(float healthResolve)
+    {
+        currentHealth += healthResolve;
+
+        if (currentHealth >= 100)
+        {
+            currentHealth = 100;
+        }
+        Debug.Log("Player Health: " + currentHealth);
+
+        UpdateHealthUI();
+    }
+
     public void UpdateHealthUI()
     {
         if(healthBar != null)
