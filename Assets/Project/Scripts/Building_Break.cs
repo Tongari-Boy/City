@@ -1,39 +1,42 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Building_Break : MonoBehaviour
 {
-    public float viewAngle = 60f; // ‹–ìŠp
-    public float viewDistance = 10f; // ‹ŠE‹——£
-    public Transform target; // ƒ^[ƒQƒbƒg
-    public LayerMask obstacleMask; // áŠQ•¨(Œš•¨A•Ç‚Æ‚©)ƒŒƒCƒ„[
+    private EnemySearch search;
+    public float damage = 100f;
+
+    void Start()
+    {
+        search = GetComponent<EnemySearch>();
+        Rigidbody rb = GetComponent<Rigidbody>();
+    }
 
     void Update()
     {
-
+        if (search.IsInView())
+        {
+            BreakBuilding();
+        }
     }
 
-    public bool IsInView()
+    void BreakBuilding()
     {
-        //ƒ^[ƒQƒbƒg‚Ü‚Å‚Ì•ûŒü‚Æ‹——£
-        Vector3 dirToTarget = (target.position - transform.position).normalized;
-        float distanceToTarget = Vector3.Distance(transform.position, target.position);
+        //å»ºç‰©ãŒå€’ã‚Œã‚‹å‡¦ç†
 
-        //‹——£”»’è
-        if (distanceToTarget > viewDistance)
-            return false;
 
-        //‹–ìŠp”»’è
-        float angle = Vector3.Angle(transform.forward, dirToTarget);
-        if (angle > viewAngle * 0.5f)
-            return false;
-
-        //ƒŒƒCƒLƒƒƒXƒg‚ÅáŠQ•¨ƒ`ƒFƒbƒN
-        if (Physics.Raycast(transform.position, dirToTarget, distanceToTarget, obstacleMask))
-            return false;
-
-        return true;
     }
 
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            PlayerStatus status = other.GetComponent<PlayerStatus>();
+            if (status != null)
+            {
+                status.TakeDamage(damage);
+            }
+        }
+    }
 }
