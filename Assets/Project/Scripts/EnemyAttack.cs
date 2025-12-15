@@ -40,7 +40,6 @@ public class EnemyAttack : MonoBehaviour
         bool canAttack = distance <= this.agent.stoppingDistance && Time.time >= lastAttackTime + attackInterval;
 
 
-
         if (canAttack)
         {
             StartCoroutine(PerformAttack());
