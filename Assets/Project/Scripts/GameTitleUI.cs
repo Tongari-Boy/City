@@ -15,7 +15,7 @@ public class GameTitleUI : MonoBehaviour
 
     public void StartGame()
     {
-        SceneManager.LoadScene("Enemy");
+        SceneManager.LoadScene("City");
         //‚¢‚Â‚©Main‚É‚·‚éª
     }
 
