@@ -17,4 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Project/Scenes/GameClear.unity
     guid: 0ce610cb3e3eb3546858162c2ca8b87d
+  - enabled: 1
+    path: Assets/Project/Scenes/Test/City.unity
+    guid: 593b361b1f2c154409a175335fc08042
   m_configObjects: {}

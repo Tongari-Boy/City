@@ -12,7 +12,7 @@ public class GameOverUI : MonoBehaviour
 
     public void RestartGame()
     {
-        SceneManager.LoadScene("Enemy");
+        SceneManager.LoadScene("City");
         //‚¢‚Â‚©Main‚É‚·‚éª
     }
 
